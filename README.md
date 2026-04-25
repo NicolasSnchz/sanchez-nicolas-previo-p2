@@ -134,7 +134,7 @@ El repositorio envuelve cada llamada en un `sealed class Result<T>` que puede se
 ```
 sanchez-nicolas-previo-p2/
 â”œâ”€â”€ app/
-â”‚   â””â”€â”€ src/main/java/com/gaoacorp/microinternships/
+â”‚   â””â”€â”€ src/main/java/com/NicolasSnchz/microinternships/
 â”‚       â”œâ”€â”€ data/
 â”‚       â”‚   â”œâ”€â”€ local/          â† Room (entities, DAOs, database)
 â”‚       â”‚   â”œâ”€â”€ remote/         â† Retrofit (services, DTOs, mappers)
@@ -167,7 +167,7 @@ sanchez-nicolas-previo-p2/
 
 ```bash
 # 1. Clonar
-git clone https://github.com/GaoaCorp/sanchez-nicolas-previo-p2.git
+git clone https://github.com/NicolasSnchz/sanchez-nicolas-previo-p2.git
 cd sanchez-nicolas-previo-p2
 
 # 2. Abrir en Android Studio
@@ -213,11 +213,12 @@ Proyecto desarrollado en pareja para el Segundo Previo de Aplicaciones MÃ³vile
 
 | Integrante | Rol |
 |------------|-----|
-| **nicolas OrdÃ³Ã±ez** â€” [@GaoaCorp](https://github.com/GaoaCorp) | Desarrollo Android, arquitectura y documentaciÃ³n |
+| **nicolas OrdÃ³Ã±ez** â€” [@NicolasSnchz](https://github.com/NicolasSnchz) | Desarrollo Android, arquitectura y documentaciÃ³n |
 | **NicolÃ¡s SÃ¡nchez** | Desarrollo Android, modelado de datos y pruebas |
 
 **InstituciÃ³n:** Universidad de Santander â€” UDES
 **Asignatura:** Aplicaciones MÃ³viles
 **AÃ±o:** 2026
-**Repositorio:** https://github.com/GaoaCorp/sanchez-nicolas-previo-p2
+**Repositorio:** https://github.com/NicolasSnchz/sanchez-nicolas-previo-p2
+
 
