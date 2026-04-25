@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/taskListFragment">
+
+    <fragment
+        android:id="@+id/taskListFragment"
+        android:name="com.gaoacorp.microinternships.ui.tasklist.TaskListFragment"
+        android:label="MicroInternships">
+
+        <action
+            android:id="@+id/action_taskList_to_taskDetail"
+            app:destination="@id/taskDetailFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/taskDetailFragment"
+        android:name="com.gaoacorp.microinternships.ui.taskdetail.TaskDetailFragment"
+        android:label="Detalle de la tarea">
+        <argument
+            android:name="taskId"
+            app:argType="integer" />
+    </fragment>
+
+</navigation>
