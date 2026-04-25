@@ -1,12 +1,12 @@
-# MicroInternships — Android App (Previo P2)
+﻿# MicroInternships â€” Android App (Previo P2)
 
-App Android nativa en Kotlin que materializa la plataforma **MicroInternships** (emprendimiento universitario UDES) como cliente móvil. Permite explorar micro tareas publicadas, ver su detalle con información cruzada del publicador, y opera tanto online como offline mediante caché local con TTL.
+App Android nativa en Kotlin que materializa la plataforma **MicroInternships** (emprendimiento universitario UDES) como cliente mÃ³vil. Permite explorar micro tareas publicadas, ver su detalle con informaciÃ³n cruzada del publicador, y opera tanto online como offline mediante cachÃ© local con TTL.
 
-Este proyecto cumple los requisitos del **Segundo Previo de Aplicaciones Móviles** (UDES — 2026): arquitectura de capas (MVVM + Clean), persistencia local con Room, consumo de dos APIs REST, y manejo robusto de errores.
+Este proyecto cumple los requisitos del **Segundo Previo de Aplicaciones MÃ³viles** (UDES â€” 2026): arquitectura de capas (MVVM + Clean), persistencia local con Room, consumo de dos APIs REST, y manejo robusto de errores.
 
 ---
 
-## 📸 Capturas de pantalla
+## ðŸ“¸ Capturas de pantalla
 
 <p align="center">
   <img src="screenshots/01_loading.png" width="220" alt="Loading" />
@@ -20,143 +20,143 @@ Este proyecto cumple los requisitos del **Segundo Previo de Aplicaciones Móvile
 
 | # | Captura | Estado que muestra |
 |---|---------|---------------------|
-| 1 | `01_loading.png` | **Loading** — ProgressBar centrado al abrir la app por primera vez |
-| 2 | `02_success_list.png` | **Success** — Lista de micro tareas cargadas con paginación |
-| 3 | `03_detail.png` | **Detalle** — Tarea seleccionada con card del publicador (API #2) |
-| 4 | `04_error.png` | **Error** — Sin conexión a internet, con botón Reintentar |
-| 5 | `05_empty.png` | **Empty** — No hay tareas disponibles |
+| 1 | `01_loading.png` | **Loading** â€” ProgressBar centrado al abrir la app por primera vez |
+| 2 | `02_success_list.png` | **Success** â€” Lista de micro tareas cargadas con paginaciÃ³n |
+| 3 | `03_detail.png` | **Detalle** â€” Tarea seleccionada con card del publicador (API #2) |
+| 4 | `04_error.png` | **Error** â€” Sin conexiÃ³n a internet, con botÃ³n Reintentar |
+| 5 | `05_empty.png` | **Empty** â€” No hay tareas disponibles |
 
 ---
 
-## 📱 Funcionalidades
+## ðŸ“± Funcionalidades
 
 - **Pantalla de lista**: muestra las micro tareas paginadas. Permite pull-to-refresh y scroll infinito.
-- **Pantalla de detalle**: muestra la descripción de la tarea y el perfil del publicador (nombre, email, ubicación, avatar).
-- **Estados de UI**: Loading (ProgressBar), Success (lista), Empty (mensaje amigable), Error (mensaje + botón reintentar).
-- **Offline-first**: si no hay internet, se muestra la última data cacheada.
-- **Caché con TTL de 15 minutos**.
+- **Pantalla de detalle**: muestra la descripciÃ³n de la tarea y el perfil del publicador (nombre, email, ubicaciÃ³n, avatar).
+- **Estados de UI**: Loading (ProgressBar), Success (lista), Empty (mensaje amigable), Error (mensaje + botÃ³n reintentar).
+- **Offline-first**: si no hay internet, se muestra la Ãºltima data cacheada.
+- **CachÃ© con TTL de 15 minutos**.
 
 ---
 
-## 🏗️ Arquitectura
+## ðŸ—ï¸ Arquitectura
 
-Se adoptó **MVVM + principios de Clean Architecture** con tres capas:
+Se adoptÃ³ **MVVM + principios de Clean Architecture** con tres capas:
 
 ```
-ui       →   domain   ←   data
+ui       â†’   domain   â†   data
 (View + ViewModel)  (modelos + contratos)  (Room + Retrofit + impl. repositorio)
 ```
 
 - `ui` depende de `domain`.
 - `data` depende de `domain` (implementa sus interfaces).
-- `domain` no conoce ni a Retrofit ni a Room — es Kotlin puro.
+- `domain` no conoce ni a Retrofit ni a Room â€” es Kotlin puro.
 
-### Stack técnico
+### Stack tÃ©cnico
 
-| Capa     | Librerías                                                            |
+| Capa     | LibrerÃ­as                                                            |
 |----------|----------------------------------------------------------------------|
 | UI       | Fragments + ViewBinding + Navigation Component + Material 3          |
 | ViewModel| `androidx.lifecycle` + `StateFlow` + `viewModelScope`                |
-| DI       | **Hilt 2.50** (módulos: Network, Database, Repository)               |
+| DI       | **Hilt 2.50** (mÃ³dulos: Network, Database, Repository)               |
 | Red      | **Retrofit 2.9** + OkHttp + Gson + interceptor de retry y logging    |
 | Persist. | **Room 2.6** + coroutines (`suspend` / `Flow`)                       |
-| Imágenes | Glide                                                                |
-| Paginación | Manual (offset/limit) con detección de scroll                      |
+| ImÃ¡genes | Glide                                                                |
+| PaginaciÃ³n | Manual (offset/limit) con detecciÃ³n de scroll                      |
 
 ---
 
-## 🔗 APIs consumidas
+## ðŸ”— APIs consumidas
 
 | #  | Nombre            | Base URL                                   | Endpoint usado             |
 |----|-------------------|--------------------------------------------|----------------------------|
 | 1  | JSONPlaceholder   | `https://jsonplaceholder.typicode.com/`    | `GET /todos?_start&_limit` |
 | 2  | RandomUser API    | `https://randomuser.me/api/`               | `GET ?seed=&results=1`     |
 
-Ambas son públicas y **no requieren API key**.
+Ambas son pÃºblicas y **no requieren API key**.
 
 ---
 
-## ⚙️ Estrategia de caché (TTL)
+## âš™ï¸ Estrategia de cachÃ© (TTL)
 
-El repositorio implementa el patrón **Single Source of Truth** con TTL de **15 minutos**:
+El repositorio implementa el patrÃ³n **Single Source of Truth** con TTL de **15 minutos**:
 
 1. El ViewModel pide datos al repositorio.
 2. El repositorio consulta Room primero.
 3. Si `cachedAt + 15min > ahora`, devuelve los datos locales sin golpear la red.
-4. Si la caché expiró, llama a la API, guarda la respuesta en Room y la retorna.
-5. Si la red falla pero hay caché (aunque expirada), se retorna la caché.
+4. Si la cachÃ© expirÃ³, llama a la API, guarda la respuesta en Room y la retorna.
+5. Si la red falla pero hay cachÃ© (aunque expirada), se retorna la cachÃ©.
 
-> **¿Por qué 15 minutos?** Las micro tareas no cambian con la frecuencia de un feed social; 15 min es un balance razonable entre frescura percibida y ahorro de batería/datos móviles.
-
----
-
-## 🗄️ Modelo de datos (Room)
-
-```
-┌──────────────────┐        1      N   ┌──────────────┐
-│ PublisherEntity  │◄──────────────────┤ TaskEntity   │
-├──────────────────┤                   ├──────────────┤
-│ id (PK)          │                   │ id (PK)      │
-│ fullName         │                   │ title        │
-│ email            │                   │ description  │
-│ city             │                   │ category     │
-│ country          │                   │ rewardUsd    │
-│ avatarUrl        │                   │ publisherId  │◄── FK
-│ cachedAt         │                   │ status       │
-│ companyName      │ ← agregado en     │ isCompleted  │
-└──────────────────┘    Migration 1→2  │ page         │
-                                       │ cachedAt     │
-                                       └──────────────┘
-```
-
-**Migración:** `MIGRATION_1_2` agrega la columna `companyName` vía `ALTER TABLE`. `fallbackToDestructiveMigration` está desactivado.
+> **Â¿Por quÃ© 15 minutos?** Las micro tareas no cambian con la frecuencia de un feed social; 15 min es un balance razonable entre frescura percibida y ahorro de baterÃ­a/datos mÃ³viles.
 
 ---
 
-## 🚨 Manejo de errores
+## ðŸ—„ï¸ Modelo de datos (Room)
+
+```
+â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”        1      N   â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+â”‚ PublisherEntity  â”‚â—„â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¤ TaskEntity   â”‚
+â”œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¤                   â”œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¤
+â”‚ id (PK)          â”‚                   â”‚ id (PK)      â”‚
+â”‚ fullName         â”‚                   â”‚ title        â”‚
+â”‚ email            â”‚                   â”‚ description  â”‚
+â”‚ city             â”‚                   â”‚ category     â”‚
+â”‚ country          â”‚                   â”‚ rewardUsd    â”‚
+â”‚ avatarUrl        â”‚                   â”‚ publisherId  â”‚â—„â”€â”€ FK
+â”‚ cachedAt         â”‚                   â”‚ status       â”‚
+â”‚ companyName      â”‚ â† agregado en     â”‚ isCompleted  â”‚
+â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜    Migration 1â†’2  â”‚ page         â”‚
+                                       â”‚ cachedAt     â”‚
+                                       â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
+```
+
+**MigraciÃ³n:** `MIGRATION_1_2` agrega la columna `companyName` vÃ­a `ALTER TABLE`. `fallbackToDestructiveMigration` estÃ¡ desactivado.
+
+---
+
+## ðŸš¨ Manejo de errores
 
 El repositorio envuelve cada llamada en un `sealed class Result<T>` que puede ser `Success`, `Error(type, message)` o `Loading`. Los tipos de error diferenciados:
 
 | Tipo              | Origen                          | Mensaje al usuario                |
 |-------------------|---------------------------------|-----------------------------------|
-| `NETWORK`         | `IOException`                   | "Sin conexión a internet"         |
-| `TIMEOUT`         | `SocketTimeoutException`        | "La API tardó demasiado"          |
+| `NETWORK`         | `IOException`                   | "Sin conexiÃ³n a internet"         |
+| `TIMEOUT`         | `SocketTimeoutException`        | "La API tardÃ³ demasiado"          |
 | `NOT_FOUND`       | HTTP 404                        | "Recurso no encontrado"           |
 | `SERVER`          | HTTP 5xx                        | "Error del servidor"              |
 | `UNAUTHORIZED`    | HTTP 401/403                    | "No autorizado"                   |
-| `PARSING`         | Gson / JSON malformado          | "Datos inválidos"                 |
-| `UNKNOWN`         | Cualquier otra                  | Mensaje genérico                  |
+| `PARSING`         | Gson / JSON malformado          | "Datos invÃ¡lidos"                 |
+| `UNKNOWN`         | Cualquier otra                  | Mensaje genÃ©rico                  |
 
 ---
 
-## 📁 Estructura del repositorio
+## ðŸ“ Estructura del repositorio
 
 ```
-Gustavo-Ordonez-previo-p2/
-├── app/
-│   └── src/main/java/com/gaoacorp/microinternships/
-│       ├── data/
-│       │   ├── local/          ← Room (entities, DAOs, database)
-│       │   ├── remote/         ← Retrofit (services, DTOs, mappers)
-│       │   └── repository/     ← TaskRepositoryImpl
-│       ├── domain/
-│       │   ├── model/          ← Task, Publisher, Result
-│       │   └── repository/     ← TaskRepository (interfaz)
-│       ├── ui/
-│       │   ├── tasklist/       ← Fragment + ViewModel + Adapter
-│       │   ├── taskdetail/     ← Fragment + ViewModel
-│       │   ├── common/         ← UiState
-│       │   └── MainActivity.kt
-│       └── di/                 ← NetworkModule, DatabaseModule, RepositoryModule
-├── screenshots/                ← 5 capturas de los estados de la app
-├── docs/                       ← Ordonez_PrevioP2.pdf (documento técnico)
-├── COMMITS.md                  ← guía de los 5 commits
-└── README.md
+sanchez-nicolas-previo-p2/
+â”œâ”€â”€ app/
+â”‚   â””â”€â”€ src/main/java/com/gaoacorp/microinternships/
+â”‚       â”œâ”€â”€ data/
+â”‚       â”‚   â”œâ”€â”€ local/          â† Room (entities, DAOs, database)
+â”‚       â”‚   â”œâ”€â”€ remote/         â† Retrofit (services, DTOs, mappers)
+â”‚       â”‚   â””â”€â”€ repository/     â† TaskRepositoryImpl
+â”‚       â”œâ”€â”€ domain/
+â”‚       â”‚   â”œâ”€â”€ model/          â† Task, Publisher, Result
+â”‚       â”‚   â””â”€â”€ repository/     â† TaskRepository (interfaz)
+â”‚       â”œâ”€â”€ ui/
+â”‚       â”‚   â”œâ”€â”€ tasklist/       â† Fragment + ViewModel + Adapter
+â”‚       â”‚   â”œâ”€â”€ taskdetail/     â† Fragment + ViewModel
+â”‚       â”‚   â”œâ”€â”€ common/         â† UiState
+â”‚       â”‚   â””â”€â”€ MainActivity.kt
+â”‚       â””â”€â”€ di/                 â† NetworkModule, DatabaseModule, RepositoryModule
+â”œâ”€â”€ screenshots/                â† 5 capturas de los estados de la app
+â”œâ”€â”€ docs/                       â† sanchez_PrevioP2.pdf (documento tÃ©cnico)
+â”œâ”€â”€ COMMITS.md                  â† guÃ­a de los 5 commits
+â””â”€â”€ README.md
 ```
 
 ---
 
-## 🚀 Cómo ejecutar
+## ðŸš€ CÃ³mo ejecutar
 
 ### Requisitos
 - Android Studio **Hedgehog** (2023.1.1) o superior.
@@ -167,56 +167,57 @@ Gustavo-Ordonez-previo-p2/
 
 ```bash
 # 1. Clonar
-git clone https://github.com/GaoaCorp/Gustavo-Ordonez-previo-p2.git
-cd Gustavo-Ordonez-previo-p2
+git clone https://github.com/GaoaCorp/sanchez-nicolas-previo-p2.git
+cd sanchez-nicolas-previo-p2
 
 # 2. Abrir en Android Studio
-#    File → Open → seleccionar la carpeta raíz
+#    File â†’ Open â†’ seleccionar la carpeta raÃ­z
 
-# 3. Sincronizar Gradle (automático la primera vez)
+# 3. Sincronizar Gradle (automÃ¡tico la primera vez)
 
 # 4. Ejecutar
-#    Run → 'app'  (o Shift+F10)
+#    Run â†’ 'app'  (o Shift+F10)
 ```
 
-**No se requiere API key** — las dos APIs son públicas y gratuitas.
+**No se requiere API key** â€” las dos APIs son pÃºblicas y gratuitas.
 
 ---
 
-## ✅ Checklist de cumplimiento del previo
+## âœ… Checklist de cumplimiento del previo
 
 - [x] Arquitectura MVVM con capas `data/`, `domain/`, `ui/`, `di/`
-- [x] ViewModel por pantalla (sin lógica en Fragments)
-- [x] Repository como única fuente de verdad
-- [x] Hilt para inyección de dependencias
-- [x] Room con 2 entidades relacionadas (1:N) y 8–10 campos cada una
+- [x] ViewModel por pantalla (sin lÃ³gica en Fragments)
+- [x] Repository como Ãºnica fuente de verdad
+- [x] Hilt para inyecciÃ³n de dependencias
+- [x] Room con 2 entidades relacionadas (1:N) y 8â€“10 campos cada una
 - [x] DAOs con `suspend fun` y `Flow<T>`
-- [x] Migración definida (1→2) sin `fallbackToDestructiveMigration`
+- [x] MigraciÃ³n definida (1â†’2) sin `fallbackToDestructiveMigration`
 - [x] TTL implementado (15 min) y documentado
 - [x] Retrofit con 2 APIs distintas
-- [x] DTOs + Mappers explícitos
+- [x] DTOs + Mappers explÃ­citos
 - [x] `sealed class Result` con estados diferenciados
-- [x] Paginación manual funcional
+- [x] PaginaciÃ³n manual funcional
 - [x] Coroutines en `Dispatchers.IO`
 - [x] OkHttpClient con `connectTimeout`/`readTimeout`
 - [x] Retry interceptor
-- [x] Navegación entre 2 pantallas (Navigation Component + Safe Args)
+- [x] NavegaciÃ³n entre 2 pantallas (Navigation Component + Safe Args)
 - [x] Estados UI: Loading, Error, Empty, Success
 - [x] 5 screenshots incluidos en `/screenshots`
-- [x] Documento técnico en `/docs/Ordonez_PrevioP2.pdf`
+- [x] Documento tÃ©cnico en `/docs/sanchez_PrevioP2.pdf`
 
 ---
 
-## 👥 Autores
+## ðŸ‘¥ Autores
 
-Proyecto desarrollado en pareja para el Segundo Previo de Aplicaciones Móviles.
+Proyecto desarrollado en pareja para el Segundo Previo de Aplicaciones MÃ³viles.
 
 | Integrante | Rol |
 |------------|-----|
-| **Gustavo Ordóñez** — [@GaoaCorp](https://github.com/GaoaCorp) | Desarrollo Android, arquitectura y documentación |
-| **Nicolás Sánchez** | Desarrollo Android, modelado de datos y pruebas |
+| **nicolas OrdÃ³Ã±ez** â€” [@GaoaCorp](https://github.com/GaoaCorp) | Desarrollo Android, arquitectura y documentaciÃ³n |
+| **NicolÃ¡s SÃ¡nchez** | Desarrollo Android, modelado de datos y pruebas |
 
-**Institución:** Universidad de Santander — UDES
-**Asignatura:** Aplicaciones Móviles
-**Año:** 2026
-**Repositorio:** https://github.com/GaoaCorp/Gustavo-Ordonez-previo-p2
+**InstituciÃ³n:** Universidad de Santander â€” UDES
+**Asignatura:** Aplicaciones MÃ³viles
+**AÃ±o:** 2026
+**Repositorio:** https://github.com/GaoaCorp/sanchez-nicolas-previo-p2
+

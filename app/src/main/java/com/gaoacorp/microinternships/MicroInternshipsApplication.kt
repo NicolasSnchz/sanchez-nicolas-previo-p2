@@ -1,17 +1,18 @@
-package com.gaoacorp.microinternships
+﻿package com.gaoacorp.microinternships
 
 import android.app.Application
 import dagger.hilt.android.HiltAndroidApp
 
 /**
- * Punto de entrada de la aplicación MicroInternships.
+ * Punto de entrada de la aplicaciÃ³n MicroInternships.
  *
- * La anotación @HiltAndroidApp activa la generación del contenedor
+ * La anotaciÃ³n @HiltAndroidApp activa la generaciÃ³n del contenedor
  * de dependencias de Hilt a nivel de Application.
  *
- * @author Gustavo Ordóñez (@GaoaCorp)
- * @author Nicolás Sánchez
- * @since 2026 — Segundo Previo de Aplicaciones Móviles — UDES
+ * @author nicolas OrdÃ³Ã±ez (@GaoaCorp)
+ * @author NicolÃ¡s SÃ¡nchez
+ * @since 2026 â€” Segundo Previo de Aplicaciones MÃ³viles â€” UDES
  */
 @HiltAndroidApp
 class MicroInternshipsApplication : Application()
+
